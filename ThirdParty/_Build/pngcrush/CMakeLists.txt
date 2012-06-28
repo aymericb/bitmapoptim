@@ -36,4 +36,5 @@ set(libpng_sources
 add_executable(pngcrush ${source_files})
 target_link_libraries(pngcrush ${PNG_LIB_NAME} ${ZLIB_LIB_NAME})
 
-
+# Installation
+install(TARGETS pngcrush RUNTIME DESTINATION bin)

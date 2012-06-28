@@ -102,6 +102,6 @@ $cmake = GetConfig("CMakePath")
 $devenv = GetConfig("VisualStudio2010")
 
 # Build zlib
-#Build zlib
-#Build libpng
+Build zlib
+Build libpng
 Build pngcrush
