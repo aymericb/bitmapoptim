@@ -21,7 +21,7 @@ trap {
 	break;
 }
 
-# Contants
+# Constants
 $TempDir = "$PWD\Temp"
 
 # Utility functions
@@ -124,4 +124,5 @@ $XmlConfig.Load($XmlConfigPath)
 $z7 = GetConfig("Zip7Path")
 $cmake = GetConfig("CMakePath")
 
-DownloadThirdparty zlib
+#DownloadThirdparty zlib
+DownloadThirdparty libpng
