@@ -1,0 +1,17 @@
+<Config>
+	
+	<!-- Change paths to match your system -->
+	<Zip7Path>C:\Program Files\7-Zip\7z.exe</Zip7Path>
+	<CMakePath>C:\Program Files (x86)\CMake 2.8\bin\cmake.exe</CMakePath>
+	
+	<!-- Modules -->
+	<Module name="zlib">
+		<Directory>zlib</Directory>
+		<URL>http://zlib.net/zlib-1.2.7.tar.gz</URL>
+	</Module>
+	<Module name="libpng">
+		<Directory>libpng</Directory>
+		<URL>http://download.sourceforge.net/libpng/libpng-1.2.49.tar.gz</URL>
+	</Module>
+	
+</Config>

@@ -1,0 +1,30 @@
+======================================================================================================================
+
+Foreword
+--------
+The thirdparties need to be compiled, as they are used internally by BitmapOptim.
+
+======================================================================================================================
+
+Requirements
+------------
+
+- Visual Studio 2010 Professional SP1 (other compilers will probably work with small changes)
+- CMake 2.8.7 or greater
+- Powershell
+
+======================================================================================================================
+
+Instructions to build the third parties
+---------------------------------------
+
+1- Set the location of 7zip and CMake executables into BuildConfig.xml
+
+2- Launch the download_sources.ps1 with powershell (you might need to adjust the execution policy. See http://technet.microsoft.com/en-us/library/ee176961.aspx)
+
+This script will parse the BuildConfig.xml file, download the third parties, extract the sources, and copy the 
+CMakeFile.text files into the target folder.
+
+3- Run CMake either by hand, or use the cmake.ps1 script. The script automatically set the compiler preferences
+to match visual studio 2010
+
