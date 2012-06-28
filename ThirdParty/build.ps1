@@ -55,8 +55,9 @@ function Build($module)
 	Write-Host "Building $module ... " -foregroundcolor Cyan
 	
 	# CMake
-	$source_path = Join-Path $PWD $module
-	$output_dir = Join-Path $BuildDir $module
+	$dir = GetConfig "Directory" $module
+	$source_path = Join-Path $PWD $dir
+	$output_dir = Join-Path $BuildDir $dir
 	mkdir $output_dir > $null
 	$prev = $PWD
 	cd $output_dir
@@ -69,7 +70,7 @@ function Build($module)
 	}
 	
 	# DevEnv
-	$sln = (Join-Path $output_dir "$module.sln")
+	$sln = (Join-Path $output_dir "$dir.sln")
 	Write-Host "Running devenv ... " -nonewline
 	& $devenv $sln /build "Release|Win32"
 	Write-Host "DONE"
@@ -101,5 +102,6 @@ $cmake = GetConfig("CMakePath")
 $devenv = GetConfig("VisualStudio2010")
 
 # Build zlib
-Build zlib
-Build libpng
+#Build zlib
+#Build libpng
+Build pngcrush

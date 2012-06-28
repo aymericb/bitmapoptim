@@ -14,5 +14,9 @@
 		<Directory>libpng</Directory>
 		<URL>http://download.sourceforge.net/libpng/libpng-1.2.49.tar.gz</URL>
 	</Module>
+	<Module name="pngcrush">
+		<Directory>pngcrush</Directory>
+		<URL>http://downloads.sourceforge.net/project/pmt/pngcrush/1.7.30/pngcrush-1.7.30.7z</URL>
+	</Module>
 	
 </Config>

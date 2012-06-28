@@ -95,7 +95,7 @@ function DownloadThirdparty($module)
 	DownloadFile $url $download_path
 	
 	# Erase output dir
-	$output_dir = Join-Path $PWD $module
+	$output_dir = Join-Path $PWD $dir
 	if (Test-Path $output_dir)
 	{
 		Write-Host "Erasing output directory $output_dir ... " -nonewline
@@ -125,4 +125,5 @@ $z7 = GetConfig("Zip7Path")
 $cmake = GetConfig("CMakePath")
 
 #DownloadThirdparty zlib
-DownloadThirdparty libpng
+#DownloadThirdparty libpng
+DownloadThirdparty pngcrush
