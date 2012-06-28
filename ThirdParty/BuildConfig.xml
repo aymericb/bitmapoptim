@@ -2,8 +2,8 @@
 	
 	<!-- Change paths to match your system -->
 	<Zip7Path>C:\Program Files\7-Zip\7z.exe</Zip7Path>
-	<CMakePath>C:\Program Files (x86)\CMake 2.8\bin\cmake.exe</CMakePath>
-	<VisualStudio2010>C:\Program Files (x86)\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</VisualStudio2010>
+	<CMakePath>C:\Program Files\CMake 2.8\bin\cmake.exe</CMakePath>
+	<VisualStudio2010>C:\Program Files\Microsoft Visual Studio 10.0\Common7\IDE\devenv.exe</VisualStudio2010>
 	
 	<!-- Modules -->
 	<Module name="zlib">
@@ -17,6 +17,10 @@
 	<Module name="pngcrush">
 		<Directory>pngcrush</Directory>
 		<URL>http://downloads.sourceforge.net/project/pmt/pngcrush/1.7.30/pngcrush-1.7.30.7z</URL>
+	</Module>
+	<Module name="ObjectListView">
+		<Directory>ObjectListView</Directory>
+		<URL>http://downloads.sourceforge.net/project/objectlistview/objectlistview/v2.5.1/ObjectListView-2.5.1.zip</URL>
 	</Module>
 	
 </Config>

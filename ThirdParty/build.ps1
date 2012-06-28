@@ -86,11 +86,31 @@ function Build($module)
 		throw "Install failed"
 	}	
 
-	Write-Host "Building $module ... DONE" -foregroundcolor Cyan
+	Write-Host "DONE $module" -foregroundcolor Cyan
+}
+
+function BuildObjectListView
+{
+	Write-Host "Building ObjectListView ... " -foregroundcolor Cyan
+	$dir = GetConfig "Directory" "ObjectListView"
+	$source_path = Join-Path $PWD $dir
+	$sln = Join-Path $source_path "ObjectListView2010.sln"
+	Write-Host "Running devenv ... " -nonewline
+	& $devenv $sln /build "Release|Any CPU"
+	if ($LastExitCode -ne 0) {
+		throw "ObjectListView build failed"
+	}	
+	Write-Host "DONE"	
+	Write-Host "Installing files ... " -nonewline
+	Start-Sleep -m 500 # dodgy workaround
+	Copy-Item $source_path\ObjectListView\bin\Release\* (Join-Path $BinDir bin) 
+	Write-Host "DONE"	
+	
+	Write-Host "DONE ObjectListView" -foregroundcolor Cyan
 }
 
 # Clear Bin directory
-#CleanDirectory $BinDir
+CleanDirectory $BinDir
 CleanDirectory $BuildDir
 
 # Retrieve configuration file
@@ -105,3 +125,4 @@ $devenv = GetConfig("VisualStudio2010")
 Build zlib
 Build libpng
 Build pngcrush
+BuildObjectListView

@@ -52,7 +52,7 @@ function CleanDirectory($path)
 {
 	if (Test-Path $path)
 	{
-		Remove-Item -Recurse $path -ErrorAction Stop
+		Remove-Item -Recurse $path -ErrorAction Stop -Force
 	}
 	New-Item $path -type directory > $null
 }
@@ -76,8 +76,9 @@ function ExtractFile($path, $output_dir, $postprocess=$false)
 		Get-ChildItem $output_dir | %{ $count=$count+1; $found_dir = $_.FullName }
 		if ($count -eq 1)
 		{
-			Move-Item $found_dir\* $output_dir
-			Remove-Item $found_dir
+			Move-Item $found_dir\* $output_dir  -Force
+			Remove-Item $found_dir\*.suo -Force # Workaround weird bug
+			Remove-Item $found_dir -Force
 		}
 		Write-Host "DONE"
 	}
@@ -101,7 +102,7 @@ function DownloadThirdparty($module)
 	if (Test-Path $output_dir)
 	{
 		Write-Host "Erasing output directory $output_dir ... " -nonewline
-		Remove-Item -Recurse $output_dir -ErrorAction Stop
+		Remove-Item -Recurse $output_dir -ErrorAction Stop -Force
 		Write-Host "DONE"
 	}
 	
@@ -131,6 +132,7 @@ function DownloadThirdparty($module)
 		}		
 	}
 
+	Write-Host -foregroundcolor cyan "DONE $module"
 }
 
 # Clear Temp directory
@@ -146,3 +148,4 @@ $cmake = GetConfig("CMakePath")
 DownloadThirdparty zlib
 DownloadThirdparty libpng
 DownloadThirdparty pngcrush
+DownloadThirdparty ObjectListView
