@@ -23,6 +23,8 @@ trap {
 
 # Constants
 $TempDir = "$PWD\Temp"
+$BuildExtraDir = "$PWD\_Build"
+$PatchFilename = "patch.ps1"
 
 # Utility functions
 function DownloadFile($url, $output_path)
@@ -110,7 +112,24 @@ function DownloadThirdparty($module)
 		$download_path = $download_path.SubString(0, $download_path.LastIndexOf("."))
 	}	
 	ExtractFile $download_path $output_dir $true
-		
+	
+	# Add extra files
+	$extra_dir = Join-Path $BuildExtraDir $dir
+	if (Test-Path $extra_dir)
+	{
+		Get-ChildItem $extra_dir | %{
+			$source_path = $_.FullName
+			$source_filename = $source_path.SubString($source_path.LastIndexOf("\")+1)
+			if ($source_filename -ne $PatchFileName) {
+				$dest_path = Join-Path $output_dir $source_filename
+				Copy-Item $source_path $dest_path
+			}
+		}
+		$patch_file = Join-Path $extra_dir $PatchFileName
+		if (Test-Path $patch_file) {
+			& $patch_file $output_dir
+		}		
+	}
 
 }
 
