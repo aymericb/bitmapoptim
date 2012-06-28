@@ -1,0 +1,13 @@
+prefix=C:/GIT/BitmapOptim/ThirdParty/bin
+exec_prefix=C:/GIT/BitmapOptim/ThirdParty/bin
+libdir=C:/GIT/BitmapOptim/ThirdParty/bin/lib
+sharedlibdir=C:/GIT/BitmapOptim/ThirdParty/bin/lib
+includedir=C:/GIT/BitmapOptim/ThirdParty/bin/include
+
+Name: zlib
+Description: zlib compression library
+Version: 1.2.7
+
+Requires:
+Libs: -L${libdir} -L${sharedlibdir} -lz
+Cflags: -I${includedir}

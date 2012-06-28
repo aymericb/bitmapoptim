@@ -1,0 +1,10 @@
+prefix=C:/GIT/BitmapOptim/ThirdParty/bin
+exec_prefix=C:/GIT/BitmapOptim/ThirdParty/bin
+libdir=C:/GIT/BitmapOptim/ThirdParty/bin/lib
+includedir=C:/GIT/BitmapOptim/ThirdParty/bin/include/libpng12
+
+Name: libpng
+Description: Loads and saves PNG files
+Version: 1.2.49
+Libs: -LC:/GIT/BitmapOptim/ThirdParty/bin/lib -lpng12
+Cflags: -IC:/GIT/BitmapOptim/ThirdParty/bin/include
