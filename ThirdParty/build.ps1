@@ -80,11 +80,12 @@ function Build($module)
 	
 	# DevEnv Install
 	Write-Host "Running devenv INSTALL ... " -nonewline
-	& $devenv $sln /build "Release|Win32" /project INSTALL
+	& $devenv $sln /build "Release|Win32" /project INSTALL 
 	Write-Host "DONE"
 	if ($LastExitCode -ne 0) {
 		throw "Install failed"
 	}	
+	Start-Sleep -m 500 # There is some kind of race condition. When devenv exits, the install is not finished
 
 	Write-Host "DONE $module" -foregroundcolor Cyan
 }
@@ -102,7 +103,7 @@ function BuildObjectListView
 	}	
 	Write-Host "DONE"	
 	Write-Host "Installing files ... " -nonewline
-	Start-Sleep -m 500 # dodgy workaround
+	#Start-Sleep -m 500 # dodgy workaround
 	Copy-Item $source_path\ObjectListView\bin\Release\* (Join-Path $BinDir bin) 
 	Write-Host "DONE"	
 	
