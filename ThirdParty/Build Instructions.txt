@@ -18,13 +18,17 @@ Requirements
 Instructions to build the third parties
 ---------------------------------------
 
-1- Set the location of 7zip and CMake executables into BuildConfig.xml
+1- Set powershell to execute the scripts contained in this directory.
+   The easy way is to allow *any* script to run.
+   * run powershell console with admin privileges
+   * type 'Set-ExecutionPolicy Unrestricted'
+   * reply 'Y' for yes
 
-2- Launch the download_sources.ps1 with powershell (you might need to adjust the execution policy. See http://technet.microsoft.com/en-us/library/ee176961.aspx)
+2- Set the location of 7zip and CMake executables into BuildConfig.xml
 
-This script will parse the BuildConfig.xml file, download the third parties, extract the sources, and copy the 
-CMakeFile.text files into the target folder.
+3- Launch the download.ps1 with powershell
+   This script downloads and patch the thirdparties files.
 
-3- Run CMake either by hand, or use the cmake.ps1 script. The script automatically set the compiler preferences
-to match visual studio 2010
+4- Build the thirdparties with build.ps1
+   This script executes CMake multiple times to build the third parties.
 

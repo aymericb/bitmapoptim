@@ -143,6 +143,6 @@ $XmlConfig.Load($XmlConfigPath)
 $z7 = GetConfig("Zip7Path")
 $cmake = GetConfig("CMakePath")
 
-#DownloadThirdparty zlib
-#DownloadThirdparty libpng
+DownloadThirdparty zlib
+DownloadThirdparty libpng
 DownloadThirdparty pngcrush
