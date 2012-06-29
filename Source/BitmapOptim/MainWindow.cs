@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace BitmapOptim
@@ -31,5 +32,17 @@ namespace BitmapOptim
             m_app_config.MainWindowBounds = this.DesktopBounds;
         }
 
+        private void btnBrowse_Click(object sender, EventArgs e)
+        {
+            // Legacy Win2k dialog selector sucks
+            // ### TODO: Use new common control dialogs instead: 
+            // http://stackoverflow.com/questions/600346/using-openfiledialog-for-directory-not-folderbrowserdialog
+
+            FolderBrowserDialog folder_dialog = new FolderBrowserDialog();
+            if (folder_dialog.ShowDialog() == DialogResult.OK)
+            {
+                txtPath.Text = folder_dialog.SelectedPath;
+            }
+        }
     }
 }
