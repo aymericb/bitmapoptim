@@ -28,11 +28,14 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.statusStip = new System.Windows.Forms.StatusStrip();
             this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
+            this.errProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.statusStip.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             this.SuspendLayout();
             // 
             // statusStip
@@ -67,8 +70,13 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtPath.Location = new System.Drawing.Point(12, 12);
             this.txtPath.Name = "txtPath";
-            this.txtPath.Size = new System.Drawing.Size(565, 20);
+            this.txtPath.Size = new System.Drawing.Size(554, 20);
             this.txtPath.TabIndex = 2;
+            // 
+            // errProvider
+            // 
+            this.errProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
+            this.errProvider.ContainerControl = this;
             // 
             // MainWindow
             // 
@@ -85,6 +93,7 @@
             this.Load += new System.EventHandler(this.MainWindow_Load);
             this.statusStip.ResumeLayout(false);
             this.statusStip.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.errProvider)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -96,6 +105,7 @@
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.ToolStripStatusLabel statusText;
+        private System.Windows.Forms.ErrorProvider errProvider;
     }
 }
 
