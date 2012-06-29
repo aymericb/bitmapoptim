@@ -1,6 +1,6 @@
 ﻿namespace BitmapOptim
 {
-    partial class BitmapOptim
+    partial class MainWindow
     {
         /// <summary>
         /// Required designer variable.
@@ -29,17 +29,26 @@
         private void InitializeComponent()
         {
             this.statusStip = new System.Windows.Forms.StatusStrip();
+            this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
+            this.statusStip.SuspendLayout();
             this.SuspendLayout();
             // 
             // statusStip
             // 
+            this.statusStip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.statusText});
             this.statusStip.Location = new System.Drawing.Point(0, 347);
             this.statusStip.Name = "statusStip";
             this.statusStip.Size = new System.Drawing.Size(670, 22);
             this.statusStip.TabIndex = 0;
             this.statusStip.Text = "statusStrip1";
+            // 
+            // statusText
+            // 
+            this.statusText.Name = "statusText";
+            this.statusText.Size = new System.Drawing.Size(0, 17);
             // 
             // btnBrowse
             // 
@@ -60,7 +69,7 @@
             this.txtPath.Size = new System.Drawing.Size(565, 20);
             this.txtPath.TabIndex = 2;
             // 
-            // BitmapOptim
+            // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -68,8 +77,13 @@
             this.Controls.Add(this.txtPath);
             this.Controls.Add(this.btnBrowse);
             this.Controls.Add(this.statusStip);
-            this.Name = "BitmapOptim";
+            this.MinimumSize = new System.Drawing.Size(500, 300);
+            this.Name = "MainWindow";
             this.Text = "BitmapOptim";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.MainWindow_FormClosing);
+            this.Load += new System.EventHandler(this.MainWindow_Load);
+            this.statusStip.ResumeLayout(false);
+            this.statusStip.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -80,6 +94,7 @@
         private System.Windows.Forms.StatusStrip statusStip;
         private System.Windows.Forms.Button btnBrowse;
         private System.Windows.Forms.TextBox txtPath;
+        private System.Windows.Forms.ToolStripStatusLabel statusText;
     }
 }
 

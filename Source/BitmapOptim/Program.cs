@@ -13,9 +13,19 @@ namespace BitmapOptim
         [STAThread]
         static void Main()
         {
+            // Initialize config
+            AppConfig config = AppConfig.Load<AppConfig>("BitmapOptim");
+
+            // Initialize GUI
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new BitmapOptim());
+
+            // Start GUI application
+            MainWindow win = new MainWindow(config);
+            Application.Run(win);
+
+            // Save config
+            AppConfig.Save<AppConfig>("BitmapOptim", config);
         }
     }
 }
