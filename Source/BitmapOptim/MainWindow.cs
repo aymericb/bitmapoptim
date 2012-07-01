@@ -58,6 +58,7 @@ namespace BitmapOptim
             if (keyData == Keys.Return && this.ActiveControl == txtPath)
             {
                 SetPath(txtPath.Text);
+                return true;
             }
             return base.ProcessDialogKey(keyData);
         }
@@ -68,21 +69,21 @@ namespace BitmapOptim
             errProvider.SetError(txtPath, "");
 
             // Check path exists
-            if (!Directory.Exists(path))
+            if (!File.Exists(path) && !Directory.Exists(path))
             {
                 errProvider.SetError(txtPath, "Path does not exist");
                 return;
             }
 
             // Check if the path is accessible for the user
-            if (!hasWriteAccessToFolder(path))
+            if (Directory.Exists(path) && !hasWriteAccessToFolder(path))
             {
                 errProvider.SetError(txtPath, "Path is not accessible by user");
                 return;
             }
 
-            // ### TODO
-
+            // Scan the path
+            ScanPaths(new string[] { path });
         }
 
         
@@ -106,7 +107,44 @@ namespace BitmapOptim
             }
         }
 
+        private void MainWindow_DragEnter(object sender, DragEventArgs e)
+        {
+            if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                e.Effect = DragDropEffects.Copy;
+        }
+
+        private void MainWindow_DragDrop(object sender, DragEventArgs e)
+        {
+            string[] files = (string[])e.Data.GetData(DataFormats.FileDrop);
+
+            if (files.Length < 1)
+            {
+                return;
+            }
+            else if (files.Length == 1)
+            {
+                txtPath.Text = files[0];
+                SetPath(txtPath.Text);
+                return;
+            }
+            else
+            {
+                txtPath.Text = "";
+                ScanPaths(files);
+            }
+        }
 
         #endregion
+
+        #region Background Worker control
+
+        private void ScanPaths(string[] paths)
+        {
+
+        }
+
+        #endregion
+
+
     }
 }
