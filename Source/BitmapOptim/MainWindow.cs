@@ -12,8 +12,23 @@ namespace BitmapOptim
 {
     public partial class MainWindow : Form
     {
+        enum State
+        {
+            Ready,
+            Scanning,
+            Finished
+        }
+
         private AppConfig AppConfig { get; set; }
         private string Path { get; set; }
+        private BackgroundWorker Worker { get; set; }
+        private State Status
+        {
+            get { return m_status; }
+        }
+        private List<string> FilePaths { get; set; }    // TODO: check atomicity of get/set
+
+        private State m_status; 
 
         #region Initialization and Destruction
 
@@ -22,6 +37,13 @@ namespace BitmapOptim
             InitializeComponent();
 
             this.AppConfig = app_config;
+
+            this.Worker = new BackgroundWorker();
+            this.Worker.WorkerSupportsCancellation = true;
+            this.Worker.DoWork += OnScanPaths;
+            this.Worker.RunWorkerCompleted += OnScanFinished;
+
+            SetStatus(State.Ready);
         }
 
         private void MainWindow_Load(object sender, EventArgs e)
@@ -109,8 +131,11 @@ namespace BitmapOptim
 
         private void MainWindow_DragEnter(object sender, DragEventArgs e)
         {
-            if (e.Data.GetDataPresent(DataFormats.FileDrop))
-                e.Effect = DragDropEffects.Copy;
+            if (this.Status != State.Scanning)
+            {
+                if (e.Data.GetDataPresent(DataFormats.FileDrop))
+                    e.Effect = DragDropEffects.Copy;
+            }
         }
 
         private void MainWindow_DragDrop(object sender, DragEventArgs e)
@@ -136,11 +161,114 @@ namespace BitmapOptim
 
         #endregion
 
+        #region Status
+
+        private void SetStatus(State status)
+        {
+            this.m_status = status;
+            switch (this.m_status)
+            {
+                case State.Ready:
+                    this.btnRescan.Enabled = false;
+                    this.btnCancel.Enabled = false;
+                    this.txtPath.Enabled = true;
+                    this.btnBrowse.Enabled = true;
+                    this.statusText.Text = "Ready. Select folder or files to analyse...";
+                    this.statusProgress.Visible = false;
+                    break;
+                case State.Scanning:
+                    this.btnRescan.Enabled = false;
+                    this.btnCancel.Enabled = true;
+                    this.txtPath.Enabled = false;
+                    this.btnBrowse.Enabled = false;
+                    this.statusText.Text = "Enumerating files...";
+                    this.statusProgress.Visible = true;
+                    break;
+                case State.Finished:
+                    this.btnRescan.Enabled = true;
+                    this.btnCancel.Enabled = false;
+                    this.txtPath.Enabled = true;
+                    this.btnBrowse.Enabled = true;
+                    //this.statusText.Text = "Ready";
+                    this.statusProgress.Visible = false;
+                    break;               
+            }
+        }
+
+        #endregion
+
+        #region Toolbar
+
+        private void btnCancel_Click(object sender, EventArgs e)
+        {
+            this.Worker.CancelAsync();
+        }
+
+        #endregion
+
         #region Background Worker control
 
         private void ScanPaths(string[] paths)
         {
+            SetStatus(State.Scanning);
+            this.statusProgress.Style = ProgressBarStyle.Marquee;
+            this.Worker.RunWorkerAsync(paths);            
+        }
 
+
+        static private void ScanDirectory(BackgroundWorker worker, List<string> matching_paths, string path)
+        {
+            try
+            {
+                matching_paths.AddRange(Directory.EnumerateFiles(path, "*.png", SearchOption.TopDirectoryOnly));
+                foreach (string dir in Directory.EnumerateDirectories(path))
+                {
+                    if (worker.CancellationPending)
+                        return;
+                    ScanDirectory(worker, matching_paths, dir);
+                }
+            }
+            catch (Exception)
+            {
+                // We ignore exceptions, which are probably caused by access exceptions.
+            }
+        }
+
+        private void OnScanPaths(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            string[] paths = (string[])e.Argument;
+
+            // ### TODO: Removed hardcoded extensions
+            List<string> matching_paths = new List<string>();
+            foreach (string path in paths)
+            {
+                if (Directory.Exists(path))
+                {
+                    ScanDirectory(worker, matching_paths, path);
+                }
+                else
+                {
+                    if (path.ToLower().EndsWith(".png"))
+                        matching_paths.Add(path);
+                }
+            }
+            this.FilePaths = matching_paths;
+
+
+        }
+
+        private void OnScanFinished(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SetStatus(State.Finished);
+            if (e.Error != null)
+            {
+                statusText.Text = "Error: " + e.Error.Message;
+                return;
+            }
+
+            statusText.Text = "Ready";
+            
         }
 
         #endregion
