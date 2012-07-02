@@ -32,13 +32,13 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.statusStip = new System.Windows.Forms.StatusStrip();
             this.statusText = new System.Windows.Forms.ToolStripStatusLabel();
+            this.toolStatus = new System.Windows.Forms.ToolStripStatusLabel();
+            this.statusProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.errProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.objectListView1 = new BrightIdeasSoftware.ObjectListView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.toolStatus = new System.Windows.Forms.ToolStripStatusLabel();
-            this.statusProgress = new System.Windows.Forms.ToolStripProgressBar();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnRescan = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel1 = new System.Windows.Forms.ToolStripLabel();
@@ -68,6 +68,17 @@
             // 
             this.statusText.Name = "statusText";
             this.statusText.Size = new System.Drawing.Size(0, 17);
+            // 
+            // toolStatus
+            // 
+            this.toolStatus.Name = "toolStatus";
+            this.toolStatus.Size = new System.Drawing.Size(574, 17);
+            this.toolStatus.Spring = true;
+            // 
+            // statusProgress
+            // 
+            this.statusProgress.Name = "statusProgress";
+            this.statusProgress.Size = new System.Drawing.Size(100, 16);
             // 
             // btnBrowse
             // 
@@ -120,17 +131,6 @@
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Select Path";
             // 
-            // toolStatus
-            // 
-            this.toolStatus.Name = "toolStatus";
-            this.toolStatus.Size = new System.Drawing.Size(574, 17);
-            this.toolStatus.Spring = true;
-            // 
-            // statusProgress
-            // 
-            this.statusProgress.Name = "statusProgress";
-            this.statusProgress.Size = new System.Drawing.Size(100, 16);
-            // 
             // toolStrip1
             // 
             this.toolStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -152,7 +152,7 @@
             this.btnRescan.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnRescan.Name = "btnRescan";
             this.btnRescan.Size = new System.Drawing.Size(23, 22);
-            this.btnRescan.Text = "toolStripButton1";
+            this.btnRescan.Text = "Rescan";
             // 
             // toolStripLabel1
             // 
@@ -167,7 +167,7 @@
             this.btnSettings.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(23, 22);
-            this.btnSettings.Text = "toolStripButton2";
+            this.btnSettings.Text = "Settings";
             // 
             // btnCancel
             // 
@@ -176,7 +176,7 @@
             this.btnCancel.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.btnCancel.Name = "btnCancel";
             this.btnCancel.Size = new System.Drawing.Size(23, 22);
-            this.btnCancel.Text = "toolStripButton3";
+            this.btnCancel.Text = "Abort Scan";
             this.btnCancel.Click += new System.EventHandler(this.btnCancel_Click);
             // 
             // toolStripLabel2
