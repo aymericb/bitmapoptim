@@ -37,7 +37,7 @@
             this.btnBrowse = new System.Windows.Forms.Button();
             this.txtPath = new System.Windows.Forms.TextBox();
             this.errProvider = new System.Windows.Forms.ErrorProvider(this.components);
-            this.objectListView1 = new BrightIdeasSoftware.ObjectListView();
+            this.listView = new BrightIdeasSoftware.ObjectListView();
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnRescan = new System.Windows.Forms.ToolStripButton();
@@ -45,9 +45,12 @@
             this.btnSettings = new System.Windows.Forms.ToolStripButton();
             this.btnCancel = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
+            this.colPath = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.colSize = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.colSavings = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.statusStip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
             this.groupBox1.SuspendLayout();
             this.toolStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -105,18 +108,25 @@
             this.errProvider.BlinkStyle = System.Windows.Forms.ErrorBlinkStyle.NeverBlink;
             this.errProvider.ContainerControl = this;
             // 
-            // objectListView1
+            // listView
             // 
-            this.objectListView1.AllowColumnReorder = true;
-            this.objectListView1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.listView.AllColumns.Add(this.colPath);
+            this.listView.AllColumns.Add(this.colSize);
+            this.listView.AllColumns.Add(this.colSavings);
+            this.listView.AllowColumnReorder = true;
+            this.listView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.objectListView1.Location = new System.Drawing.Point(12, 87);
-            this.objectListView1.Name = "objectListView1";
-            this.objectListView1.Size = new System.Drawing.Size(667, 306);
-            this.objectListView1.TabIndex = 3;
-            this.objectListView1.UseCompatibleStateImageBehavior = false;
-            this.objectListView1.View = System.Windows.Forms.View.Details;
+            this.listView.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.colPath,
+            this.colSize,
+            this.colSavings});
+            this.listView.Location = new System.Drawing.Point(12, 87);
+            this.listView.Name = "listView";
+            this.listView.Size = new System.Drawing.Size(667, 306);
+            this.listView.TabIndex = 3;
+            this.listView.UseCompatibleStateImageBehavior = false;
+            this.listView.View = System.Windows.Forms.View.Details;
             // 
             // groupBox1
             // 
@@ -188,6 +198,26 @@
             this.toolStripLabel2.Size = new System.Drawing.Size(110, 22);
             this.toolStripLabel2.Text = "© 2012 - Aymeric Barthe";
             // 
+            // colPath
+            // 
+            this.colPath.FillsFreeSpace = true;
+            this.colPath.Groupable = false;
+            this.colPath.Text = "Path";
+            // 
+            // colSize
+            // 
+            this.colSize.Groupable = false;
+            this.colSize.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colSize.Text = "Size";
+            this.colSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // colSavings
+            // 
+            this.colSavings.Groupable = false;
+            this.colSavings.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colSavings.Text = "Savings";
+            this.colSavings.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
             // MainWindow
             // 
             this.AllowDrop = true;
@@ -196,7 +226,7 @@
             this.ClientSize = new System.Drawing.Size(691, 428);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.groupBox1);
-            this.Controls.Add(this.objectListView1);
+            this.Controls.Add(this.listView);
             this.Controls.Add(this.statusStip);
             this.MinimumSize = new System.Drawing.Size(500, 300);
             this.Name = "MainWindow";
@@ -208,7 +238,7 @@
             this.statusStip.ResumeLayout(false);
             this.statusStip.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.objectListView1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.listView)).EndInit();
             this.groupBox1.ResumeLayout(false);
             this.groupBox1.PerformLayout();
             this.toolStrip1.ResumeLayout(false);
@@ -225,7 +255,7 @@
         private System.Windows.Forms.TextBox txtPath;
         private System.Windows.Forms.ToolStripStatusLabel statusText;
         private System.Windows.Forms.ErrorProvider errProvider;
-        private BrightIdeasSoftware.ObjectListView objectListView1;
+        private BrightIdeasSoftware.ObjectListView listView;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.ToolStripStatusLabel toolStatus;
         private System.Windows.Forms.ToolStripProgressBar statusProgress;
@@ -235,6 +265,9 @@
         private System.Windows.Forms.ToolStripButton btnSettings;
         private System.Windows.Forms.ToolStripButton btnCancel;
         private System.Windows.Forms.ToolStripLabel toolStripLabel2;
+        private BrightIdeasSoftware.OLVColumn colPath;
+        private BrightIdeasSoftware.OLVColumn colSize;
+        private BrightIdeasSoftware.OLVColumn colSavings;
     }
 }
 

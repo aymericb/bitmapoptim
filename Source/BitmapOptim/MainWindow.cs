@@ -26,7 +26,7 @@ namespace BitmapOptim
         {
             get { return m_status; }
         }
-        private List<string> FilePaths { get; set; }    // TODO: check atomicity of get/set
+        private List<ImageFile> Files { get; set; }    // TODO: check atomicity of get/set
 
         private State m_status; 
 
@@ -37,15 +37,18 @@ namespace BitmapOptim
             InitializeComponent();
 
             this.AppConfig = app_config;
+            this.Files = new List<ImageFile>();
 
             this.Worker = new BackgroundWorker();
             this.Worker.WorkerSupportsCancellation = true;
             this.Worker.DoWork += OnScanPaths;
             this.Worker.RunWorkerCompleted += OnScanFinished;
 
-            SetStatus(State.Ready);
-        }
+            this.listView.SetObjects(this.Files);
+            this.colPath.AspectName = "Path";           // ### TODO threading, use mutex     
 
+            SetStatus(State.Ready);            
+        }
         private void MainWindow_Load(object sender, EventArgs e)
         {
             AppConfig.RestoreWindowBounds(this, this.AppConfig.MainWindowBounds);
@@ -210,22 +213,34 @@ namespace BitmapOptim
 
         private void ScanPaths(string[] paths)
         {
+            lock (this.Files)
+            {
+                this.Files.Clear();
+            }
+            this.listView.BuildList();
             SetStatus(State.Scanning);
             this.statusProgress.Style = ProgressBarStyle.Marquee;
             this.Worker.RunWorkerAsync(paths);            
         }
 
 
-        static private void ScanDirectory(BackgroundWorker worker, List<string> matching_paths, string path)
+        private void ScanDirectory(BackgroundWorker worker, string path)
         {
             try
             {
-                matching_paths.AddRange(Directory.EnumerateFiles(path, "*.png", SearchOption.TopDirectoryOnly));
+                lock (this.Files)
+                {
+                    foreach (string file_path in Directory.EnumerateFiles(path, "*.png", SearchOption.TopDirectoryOnly))
+                    {
+                        this.Files.Add(new ImageFile(file_path));
+                    }
+                }
+                this.listView.BuildList();
                 foreach (string dir in Directory.EnumerateDirectories(path))
                 {
                     if (worker.CancellationPending)
                         return;
-                    ScanDirectory(worker, matching_paths, dir);
+                    ScanDirectory(worker, dir);
                 }
             }
             catch (Exception)
@@ -238,24 +253,26 @@ namespace BitmapOptim
         {
             BackgroundWorker worker = (BackgroundWorker)sender;
             string[] paths = (string[])e.Argument;
-
-            // ### TODO: Removed hardcoded extensions
-            List<string> matching_paths = new List<string>();
+           
             foreach (string path in paths)
             {
                 if (Directory.Exists(path))
                 {
-                    ScanDirectory(worker, matching_paths, path);
+                    ScanDirectory(worker, path);
                 }
                 else
                 {
+                    // ### TODO: Removed hardcoded extensions            
                     if (path.ToLower().EndsWith(".png"))
-                        matching_paths.Add(path);
+                    {
+                        lock (this.Files)
+                        {
+                            this.Files.Add(new ImageFile(path));
+                        }
+                    }
                 }
             }
-            this.FilePaths = matching_paths;
-
-
+            this.listView.BuildList();
         }
 
         private void OnScanFinished(object sender, RunWorkerCompletedEventArgs e)
