@@ -79,7 +79,7 @@ namespace BitmapOptim
             this.listView.SetObjects(this.Files);
             this.colPath.AspectName = "Path";           // ### TODO threading, use mutex     
             //this.colPath.AspectGetter = GetPath;
-            SetStatus(State.Ready);            
+            SetStatus(State.Ready);
         }
 
         private void MainWindow_Load(object sender, EventArgs e)

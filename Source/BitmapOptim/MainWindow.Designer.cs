@@ -58,6 +58,9 @@ namespace BitmapOptim
             this.txtPath = new System.Windows.Forms.TextBox();
             this.errProvider = new System.Windows.Forms.ErrorProvider(this.components);
             this.listView = new BrightIdeasSoftware.ObjectListView();
+            this.colPath = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.colSize = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
+            this.colSavings = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.groupBox1 = new System.Windows.Forms.GroupBox();
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.btnRescan = new System.Windows.Forms.ToolStripButton();
@@ -65,9 +68,6 @@ namespace BitmapOptim
             this.btnSettings = new System.Windows.Forms.ToolStripButton();
             this.btnCancel = new System.Windows.Forms.ToolStripButton();
             this.toolStripLabel2 = new System.Windows.Forms.ToolStripLabel();
-            this.colPath = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.colSize = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
-            this.colSavings = ((BrightIdeasSoftware.OLVColumn)(new BrightIdeasSoftware.OLVColumn()));
             this.statusStip.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.errProvider)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.listView)).BeginInit();
@@ -143,10 +143,28 @@ namespace BitmapOptim
             this.colSavings});
             this.listView.Location = new System.Drawing.Point(12, 87);
             this.listView.Name = "listView";
+            this.listView.ShowGroups = false;
             this.listView.Size = new System.Drawing.Size(667, 306);
             this.listView.TabIndex = 3;
             this.listView.UseCompatibleStateImageBehavior = false;
             this.listView.View = System.Windows.Forms.View.Details;
+            // 
+            // colPath
+            // 
+            this.colPath.FillsFreeSpace = true;
+            this.colPath.Text = "Path";
+            // 
+            // colSize
+            // 
+            this.colSize.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colSize.Text = "Size";
+            this.colSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            // 
+            // colSavings
+            // 
+            this.colSavings.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
+            this.colSavings.Text = "Savings";
+            this.colSavings.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // groupBox1
             // 
@@ -217,26 +235,6 @@ namespace BitmapOptim
             this.toolStripLabel2.Name = "toolStripLabel2";
             this.toolStripLabel2.Size = new System.Drawing.Size(110, 22);
             this.toolStripLabel2.Text = "© 2012 - Aymeric Barthe";
-            // 
-            // colPath
-            // 
-            this.colPath.FillsFreeSpace = true;
-            this.colPath.Groupable = false;
-            this.colPath.Text = "Path";
-            // 
-            // colSize
-            // 
-            this.colSize.Groupable = false;
-            this.colSize.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colSize.Text = "Size";
-            this.colSize.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            // 
-            // colSavings
-            // 
-            this.colSavings.Groupable = false;
-            this.colSavings.HeaderTextAlign = System.Windows.Forms.HorizontalAlignment.Right;
-            this.colSavings.Text = "Savings";
-            this.colSavings.TextAlign = System.Windows.Forms.HorizontalAlignment.Right;
             // 
             // MainWindow
             // 
