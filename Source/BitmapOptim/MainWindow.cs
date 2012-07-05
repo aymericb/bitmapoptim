@@ -46,29 +46,42 @@ namespace BitmapOptim
         {
             get { return m_status; }
         }
-        private List<ImageFile> Files { get; set; }    // TODO: check atomicity of get/set
+        private List<ImageFile> Files { get; set; }    
 
-        private State m_status; 
+        private List<ImageFile> PendingFiles { get; set; } // Files that need to be added to ListView
+        private Timer RefreshTimer { get; set; }
+        private State m_status;
+        
 
         #region Initialization and Destruction
 
         public MainWindow(AppConfig app_config)
         {
-            InitializeComponent();
+            InitializeComponent();            
 
+            // Initialize application data
             this.AppConfig = app_config;
             this.Files = new List<ImageFile>();
 
+            // Initialize Background Worker
             this.Worker = new BackgroundWorker();
             this.Worker.WorkerSupportsCancellation = true;
             this.Worker.DoWork += OnScanPaths;
             this.Worker.RunWorkerCompleted += OnScanFinished;
 
+            // Initialize Refresh Timer
+            this.RefreshTimer = new Timer();
+            this.RefreshTimer.Interval = 500;
+            this.RefreshTimer.Tick += OnRefreshListView;
+
+            // Initialize GUI
+            //this.PendingFiles = new List<ImageFile>();
             this.listView.SetObjects(this.Files);
             this.colPath.AspectName = "Path";           // ### TODO threading, use mutex     
-
+            //this.colPath.AspectGetter = GetPath;
             SetStatus(State.Ready);            
         }
+
         private void MainWindow_Load(object sender, EventArgs e)
         {
             AppConfig.RestoreWindowBounds(this, this.AppConfig.MainWindowBounds);
@@ -237,8 +250,9 @@ namespace BitmapOptim
             {
                 this.Files.Clear();
             }
-            this.listView.BuildList();
+            this.listView.SetObjects(this.Files);
             SetStatus(State.Scanning);
+            this.RefreshTimer.Start();
             this.statusProgress.Style = ProgressBarStyle.Marquee;
             this.Worker.RunWorkerAsync(paths);            
         }
@@ -248,14 +262,22 @@ namespace BitmapOptim
         {
             try
             {
-                lock (this.Files)
+                List<ImageFile> pending_files = new List<ImageFile>();
+                foreach (string file_path in Directory.EnumerateFiles(path, "*.png", SearchOption.TopDirectoryOnly))
                 {
-                    foreach (string file_path in Directory.EnumerateFiles(path, "*.png", SearchOption.TopDirectoryOnly))
+                    pending_files.Add(new ImageFile(file_path));
+                }
+                if (pending_files.Count > 0)
+                {
+                    lock (this.Files)
                     {
-                        this.Files.Add(new ImageFile(file_path));
+                        this.Files.AddRange(pending_files);
+                        if (this.PendingFiles == null)
+                            this.PendingFiles = pending_files;
+                        else
+                            this.PendingFiles.AddRange(pending_files);
                     }
                 }
-                this.listView.BuildList();
                 foreach (string dir in Directory.EnumerateDirectories(path))
                 {
                     if (worker.CancellationPending)
@@ -292,24 +314,44 @@ namespace BitmapOptim
                     }
                 }
             }
-            this.listView.BuildList();
         }
 
         private void OnScanFinished(object sender, RunWorkerCompletedEventArgs e)
         {
+            this.RefreshTimer.Start();
             SetStatus(State.Finished);
+            lock (this.Files)
+            {
+                this.listView.SetObjects(this.Files);
+            }
             if (e.Error != null)
             {
                 statusText.Text = "Error: " + e.Error.Message;
                 return;
             }
-
-            statusText.Text = "Ready";
-            
+            statusText.Text = "Ready";            
         }
 
         #endregion
 
+        #region ObjectListView
+
+        private void OnRefreshListView(Object myObject, EventArgs myEventArgs)
+        {
+            if (this.Status == State.Scanning)
+            {
+                lock (this.Files)
+                {
+                    if (this.PendingFiles != null)
+                    {
+                        this.listView.AddObjects(this.PendingFiles);
+                        this.PendingFiles = null;
+                    }
+                }
+            }
+        }
+
+        #endregion
 
     }
 }
