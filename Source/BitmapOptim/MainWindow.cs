@@ -77,7 +77,11 @@ namespace BitmapOptim
             // Initialize GUI
             //this.PendingFiles = new List<ImageFile>();
             this.listView.SetObjects(this.Files);
-            this.colPath.AspectName = "Path";           // ### TODO threading, use mutex     
+            this.colPath.AspectName = "Path";
+            this.colSize.AspectName = "Size";
+            this.colSize.AspectToStringConverter = delegate(object x) { return ImageFile.GetReadableSize((long)x); };
+            this.colSavings.AspectName = "Savings";
+            this.colSavings.AspectToStringConverter = GetSavings;
             //this.colPath.AspectGetter = GetPath;
             SetStatus(State.Ready);
         }
@@ -310,6 +314,7 @@ namespace BitmapOptim
                         lock (this.Files)
                         {
                             this.Files.Add(new ImageFile(path));
+                            this.listView.SetObjects(this.Files);
                         }
                     }
                 }
@@ -320,10 +325,6 @@ namespace BitmapOptim
         {
             this.RefreshTimer.Start();
             SetStatus(State.Finished);
-            lock (this.Files)
-            {
-                this.listView.SetObjects(this.Files);
-            }
             if (e.Error != null)
             {
                 statusText.Text = "Error: " + e.Error.Message;
@@ -349,6 +350,14 @@ namespace BitmapOptim
                     }
                 }
             }
+        }
+
+        private string GetSavings(object x)
+        {
+            if (x == null)
+                return "";
+            else
+                return (int)(((double)x) * 100.0) + "%";
         }
 
         #endregion

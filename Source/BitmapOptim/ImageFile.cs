@@ -37,7 +37,7 @@ namespace BitmapOptim
         public ImageType Type { get { return m_type; } }
         public long Size { get { return GetFileSize(); } }
         
-        public double Savings { get; set; }
+        public double? Savings { get; set; }
 
         private ImageType m_type;
         private string m_path;
@@ -62,6 +62,29 @@ namespace BitmapOptim
         private long GetFileSize()
         {
             return (new FileInfo(this.Path)).Length;
+        }
+
+        static public string GetReadableSize(long file_size)
+        {
+            if (file_size < 1024)   // bytes
+            {
+                return file_size + " bytes";
+            }
+            else if (file_size >= 1024 && file_size < 1024 * 1024)  // KB
+            {
+                int t = (int) (((double)file_size) / 1024.0 * 10.0);
+                return t / 10.0 + " KB";
+            }
+            else if (file_size >= 1024 * 1024 && file_size < 1024 * 1024 * 1024) // MB
+            {
+                int t = (int)(((double)file_size) / (1024.0 * 1024.0) * 10.0);
+                return t / 10.0 + " MB";
+            }
+            else // GB
+            {
+                int t = (int)(((double)file_size) / (1024.0 * 1024.0 * 1024.0) * 10.0);
+                return t / 10.0 + " GB";
+            }
         }
     }
 }
