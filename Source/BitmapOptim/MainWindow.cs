@@ -36,12 +36,14 @@ namespace BitmapOptim
         {
             Ready,
             Scanning,
+            Optimizing,
             Finished
         }
 
         private AppConfig AppConfig { get; set; }
         private string Path { get; set; }
-        private BackgroundWorker Worker { get; set; }
+        private BackgroundWorker ScanWorker { get; set; }
+        private BackgroundWorker OptimizeWorker { get; set; }
         private State Status
         {
             get { return m_status; }
@@ -63,11 +65,15 @@ namespace BitmapOptim
             this.AppConfig = app_config;
             this.Files = new List<ImageFile>();
 
-            // Initialize Background Worker
-            this.Worker = new BackgroundWorker();
-            this.Worker.WorkerSupportsCancellation = true;
-            this.Worker.DoWork += OnScanPaths;
-            this.Worker.RunWorkerCompleted += OnScanFinished;
+            // Initialize Background Workers
+            this.ScanWorker = new BackgroundWorker();
+            this.ScanWorker.WorkerSupportsCancellation = true;
+            this.ScanWorker.DoWork += OnScanPaths;
+            this.ScanWorker.RunWorkerCompleted += OnScanFinished;
+            this.OptimizeWorker = new BackgroundWorker();
+            this.OptimizeWorker.WorkerSupportsCancellation = true;
+            this.OptimizeWorker.DoWork += OnOptimize;
+            this.OptimizeWorker.RunWorkerCompleted += OnOptimizeFinished;
 
             // Initialize Refresh Timer
             this.RefreshTimer = new Timer();
@@ -224,6 +230,13 @@ namespace BitmapOptim
                     this.statusText.Text = "Enumerating files...";
                     this.statusProgress.Visible = true;
                     break;
+                case State.Optimizing:
+                    this.btnRescan.Enabled = false;
+                    this.btnCancel.Enabled = true;
+                    this.txtPath.Enabled = false;
+                    this.btnBrowse.Enabled = false;
+                    this.statusProgress.Visible = true;
+                    break;
                 case State.Finished:
                     this.btnRescan.Enabled = true;
                     this.btnCancel.Enabled = false;
@@ -241,12 +254,12 @@ namespace BitmapOptim
 
         private void btnCancel_Click(object sender, EventArgs e)
         {
-            this.Worker.CancelAsync();
+            this.ScanWorker.CancelAsync();
         }
 
         #endregion
 
-        #region Background Worker control
+        #region Background Scan Worker
 
         private void ScanPaths(string[] paths)
         {
@@ -258,9 +271,8 @@ namespace BitmapOptim
             SetStatus(State.Scanning);
             this.RefreshTimer.Start();
             this.statusProgress.Style = ProgressBarStyle.Marquee;
-            this.Worker.RunWorkerAsync(paths);            
+            this.ScanWorker.RunWorkerAsync(paths);            
         }
-
 
         private void ScanDirectory(BackgroundWorker worker, string path)
         {
@@ -323,14 +335,19 @@ namespace BitmapOptim
 
         private void OnScanFinished(object sender, RunWorkerCompletedEventArgs e)
         {
-            this.RefreshTimer.Start();
-            SetStatus(State.Finished);
             if (e.Error != null)
             {
+                SetStatus(State.Finished);
+                this.RefreshTimer.Stop();
                 statusText.Text = "Error: " + e.Error.Message;
                 return;
             }
-            statusText.Text = "Ready";            
+            else
+            {
+                SetStatus(State.Optimizing);
+                statusText.Text = "Building task hierarchy...";
+                this.OptimizeWorker.RunWorkerAsync();
+            }                    
         }
 
         #endregion
@@ -358,6 +375,28 @@ namespace BitmapOptim
                 return "";
             else
                 return (int)(((double)x) * 100.0) + "%";
+        }
+
+        #endregion
+
+        #region Background Optimize Worker
+
+        private void OnOptimize(object sender, DoWorkEventArgs e)
+        {
+            BackgroundWorker worker = (BackgroundWorker)sender;
+            
+        }
+
+        private void OnOptimizeFinished(object sender, RunWorkerCompletedEventArgs e)
+        {
+            SetStatus(State.Finished);
+            this.RefreshTimer.Stop();
+            if (e.Error != null)
+            {
+                statusText.Text = "Error: " + e.Error.Message;
+                return;
+            }
+            statusText.Text = "Finished"; 
         }
 
         #endregion
